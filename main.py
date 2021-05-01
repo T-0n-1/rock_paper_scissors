@@ -3,6 +3,8 @@
 # määrittele ulkoiset kirjastot ja paketot
 from pathlib import Path
 import random
+import os
+from time import sleep
 
 
 # Määrittele luokat (Class)
@@ -13,7 +15,11 @@ def voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta):
     kivi_paperi_sakset = {'k': 'kivi', 'p': 'paperi', 's': 'sakset'}
     pelaajan_valinta = kivi_paperi_sakset[pelaajan_valinta]
     tietokoneen_valinta = kivi_paperi_sakset[tietokoneen_valinta]
-    print(f'Tietokoneen valinta on {tietokoneen_valinta} ja pelaajan {pelaajan_valinta}.')
+    print(f'{pelaajan_valinta:>31} ', end = '');sleep(0.4)
+    print('.', end = '');sleep(0.6)
+    print('.', end = '');sleep(0.6)
+    print('. ', end = '');sleep(0.6)
+    print(f'{tietokoneen_valinta}')
     if tietokoneen_valinta == pelaajan_valinta:
         tulos = 'tasapeli'
     elif tietokoneen_valinta == 'kivi':
@@ -35,35 +41,50 @@ def voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta):
 
 
 def pelaa(nimi, tilasto, laskuri):
+    cls()
+    syöte = f"""
+                            [K]     kivi
+                            [P]     paperi
+                            [S]     sakset
+            {nimi} anna valintasi      Tietokoneen valinta
+                         >>> """
     peliloop = True
     while peliloop:
         valintaloop = True
         while valintaloop:
-            pelaajan_valinta = input(f'{nimi} anna valintasi (k - kivi, p - paperi tai s - sakset): ')
+            pelaajan_valinta = input(syöte)
             pelaajan_valinta = pelaajan_valinta.lower()
-            if pelaajan_valinta == 'k' or 'p' or 's':
+            if pelaajan_valinta == 'k':
+                valintaloop = False
+            elif pelaajan_valinta == 'p':
+                valintaloop = False
+            elif pelaajan_valinta == 's':
                 valintaloop = False
             else:
                 pass
         tietokoneen_valinta = tietokoneenValinta()
         tulos = voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta)
         if tulos == 'tasapeli':
-            print('Tasapeli - uusintakierros.')
+            print('                Tasapeli - uusintakierros.')
             laskuri += 1
         elif tulos == 'häviö':
-            print('Peli päättyi tietokoneen voittoon, parempaa onnea ensi kerralla.')
+            print('\n                Peli päättyi tietokoneen voittoon,')
+            print('\n                parempaa onnea ensi kerralla.')
             laskuri += 1
+            sleep(7)
             peliloop = False
         elif tulos == 'voitto':
-            print(f'Onneksi olkoon {nimi}, voitit tietokoneen.')
+            print(f'\n                Onneksi olkoon {nimi}, voitit tietokoneen.')
             lisaaVoitto(nimi, tilasto)
-            print(f'Olet voittanut {tilasto[nimi]} kertaa')
+            print(f'                Olet voittanut {tilasto[nimi]} kertaa')
             laskuri += 1
+            sleep(7)
             peliloop = False
         else:
             pass
     tilasto['laskuri'] = laskuri
     tallennaTilasto(tilasto)
+    cls()
     return tilasto
 
 
@@ -78,7 +99,11 @@ def tulostaParhaatPelaajatLista(tilasto):
     del parhaat_pejaalat[0]
     pelaaja = ''
     voitot = ''
-    print('*** *** Parhaat pelaajat *** ***')
+    player = 'pelaaja'
+    wins = 'voittoja'
+    cls()
+    print('\n\n************ Parhaat pelaajat ************')
+    print(f'  {player:<19}{wins:>19}  ')
     for item in parhaat_pejaalat:
         txt = str(item)
         txt = txt.strip("(")
@@ -86,7 +111,8 @@ def tulostaParhaatPelaajatLista(tilasto):
         txt = txt.strip(")")
         pelaaja, voitot = txt.split(',')
         pelaaja = pelaaja.strip("'")
-        print(f'{pelaaja}       {voitot} voittoa')
+        print(f'  {pelaaja:<19}{voitot:>19}  ')
+    print('******************************************')
 
 
 def lisaaVoitto(nimi, tilasto):
@@ -120,11 +146,12 @@ def annaNimi():
             pass
         else:
             nimiloop = False
+    cls()
     return nimi
 
 
 # määrittele muuttujat
-global nimi, tilasto, laskuri
+global nimi, tilasto, laskuri, cls
 nimi = ''
 tilasto = {}
 # tilasto['laskuri'] = 0
@@ -132,6 +159,7 @@ menuloop = True
 valinta = ''
 arvaus = ''
 laskuri = 0
+cls = lambda: os.system('clear')
 
 
 # PÄÄOHJELMA
@@ -141,20 +169,31 @@ if tilasto_tiedosto.exists():
     laskuri = tilasto['laskuri']
 else:
     pass
-print('******** Kivi, paperi, sakset -peli ********')
-print('')
-print('   Pelaa peliä tietokonetta vastaan.')
-print('   Peli kerää pelatuista kierroksista tilastoa ja')
-print('   tallentaa myös pelaajan voittojen lukumäärän.')
-print('   Peli näyttää halutessasi Parhaimmat Pelaajat -listan.')
-print('')
+cls()
+print('**************** Kivi, paperi, sakset -peli ****************')
+print('*                                                          *')
+print('*   Pelaa peliä tietokonetta vastaan.                      *')
+print('*   Peli kerää pelatuista kierroksista tilastoa ja         *')
+print('*   tallentaa myös pelaajan voittojen lukumäärän.          *')
+print('*   Peli näyttää halutessasi Parhaimmat Pelaajat -listan.  *')
+print('*                                                          *')
+print('************************************************************')
 while menuloop:
     if not nimi:
-        print('Ei määritetty pelaajaa - anna pelaajan nimi ensin.')
+        print('\nEi määritetty pelaajaa - aloita antamalla pelaajana nimi.\n')
     else:
-        print(f'Pelaaja: {nimi}       * * *       Pelikierros nro: {laskuri}')
-    valinta = input('Anna valintasi (n - anna pelaajan nimi, p = pelaa, l - tulosta Parhaat Pelaajat-lista ja q - lopeta): ')
+        print(f'\n* * *       Pelikierros nro: {laskuri}\n* * *       Pelaaja:   {nimi}')
+    syöte = """ 
+            Valikko
+            [N]   Anna/Vaihda pelaajan nimi
+            [P]   Pelaa Kivi, Paperi, Sakset -peliä
+            [L]   Tulosta Parhaat Pelaajat
+            [Q]   Lopeta peli
+            
+            Valintasi: """
+    valinta = input(syöte)
     valinta = valinta.lower()
+    print('\n\n')
     if valinta == 'n':
         nimi = annaNimi()
     elif valinta == 'p':
