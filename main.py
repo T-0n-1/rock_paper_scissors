@@ -106,6 +106,7 @@ def tulostaParhaatPelaajatLista(tilasto):
     wins = 'voittoja'
     cls()
     print('\n\n************ Parhaat pelaajat ************')
+    print(f'  pelattuja kierroksia            {laskuri:>6}  \n')
     print(f'  {player:<19}{wins:>19}  ')
     for item in parhaat_pejaalat:
         txt = str(item)
