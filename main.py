@@ -96,7 +96,10 @@ def tietokoneenValinta():
 
 def tulostaParhaatPelaajatLista(tilasto):
     parhaat_pejaalat = sorted(tilasto.items(), key=lambda kv:kv[1], reverse=True)
-    del parhaat_pejaalat[0]
+    if tilasto == {}:
+        pass
+    else:
+        del parhaat_pejaalat[0]
     pelaaja = ''
     voitot = ''
     player = 'pelaaja'
