@@ -110,11 +110,10 @@ def tulostaParhaatPelaajatLista(tilasto):
     print(f'  {player:<19}{wins:>19}  ')
     for item in parhaat_pejaalat:
         txt = str(item)
-        txt = txt.strip("(")
-        txt = txt.strip("'")
-        txt = txt.strip(")")
         pelaaja, voitot = txt.split(',')
-        pelaaja = pelaaja.strip("'")
+        pelaaja = pelaaja.lstrip("('")
+        pelaaja = pelaaja.rstrip("'")
+        voitot = voitot.rstrip(')')
         print(f'  {pelaaja:<19}{voitot:>19}  ')
     print('******************************************')
 
