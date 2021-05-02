@@ -15,7 +15,7 @@ def voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta):
     kivi_paperi_sakset = {'k': 'kivi', 'p': 'paperi', 's': 'sakset'}
     pelaajan_valinta = kivi_paperi_sakset[pelaajan_valinta]
     tietokoneen_valinta = kivi_paperi_sakset[tietokoneen_valinta]
-    print(f'{pelaajan_valinta:>31} ', end = '');sleep(0.4)
+    print(f'{pelaajan_valinta:>19} ', end = '');sleep(0.4)
     print('.', end = '');sleep(0.6)
     print('.', end = '');sleep(0.6)
     print('. ', end = '');sleep(0.6)
@@ -42,17 +42,16 @@ def voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta):
 
 def pelaa(nimi, tilasto, laskuri):
     cls()
-    syöte = f"""
-                            [K]     kivi
-                            [P]     paperi
-                            [S]     sakset
-            {nimi} anna valintasi      Tietokoneen valinta
-                         >>> """
     peliloop = True
     while peliloop:
         valintaloop = True
         while valintaloop:
-            pelaajan_valinta = input(syöte)
+            syöte = "[K]     kivi  "; print(f'{syöte:>30}')
+            syöte = "[P]     paperi"; print(f'{syöte:>30}')
+            syöte = "[S]     sakset"; print(f'{syöte:>30}')
+            syöte = f"{nimi} anna valintasi"; print(f'{syöte:>19}', end = '')
+            print('     Tietokoneen valinta')
+            syöte = ">>> "; pelaajan_valinta = input(f'{syöte:>18}')
             pelaajan_valinta = pelaajan_valinta.lower()
             if pelaajan_valinta == 'k':
                 valintaloop = False
@@ -65,18 +64,18 @@ def pelaa(nimi, tilasto, laskuri):
         tietokoneen_valinta = tietokoneenValinta()
         tulos = voittajanSelvitys(pelaajan_valinta, tietokoneen_valinta)
         if tulos == 'tasapeli':
-            print('                Tasapeli - uusintakierros.')
+            syöte = 'Tasapeli - uusintakierros'; print(f'{syöte:^43}')
             laskuri += 1
         elif tulos == 'häviö':
-            print('\n                Peli päättyi tietokoneen voittoon,')
-            print('\n                parempaa onnea ensi kerralla.')
+            syöte = '\nPeli päättyi tietokoneen voittoon,'; print(f'{syöte:^43}')
+            syöte = '\nparempaa onnea ensi kerralla.'; print(f'{syöte:^43}')
             laskuri += 1
             sleep(7)
             peliloop = False
         elif tulos == 'voitto':
-            print(f'\n                Onneksi olkoon {nimi}, voitit tietokoneen.')
+            syöte = f'\nOnneksi olkoon {nimi}, voitit tietokoneen.'; print(f'{syöte:^43}')
             lisaaVoitto(nimi, tilasto)
-            print(f'                Olet voittanut {tilasto[nimi]} kertaa')
+            syöte = f'Olet voittanut {tilasto[nimi]} kertaa'; print(f'{syöte:^43}')
             laskuri += 1
             sleep(7)
             peliloop = False
